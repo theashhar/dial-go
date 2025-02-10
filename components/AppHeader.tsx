@@ -17,7 +17,6 @@ export default function AppHeader({ Screen }: { Screen: string }) {
       <ThemedText type='title'>{Screen}</ThemedText>
       <MaterialCommunityIcons name="cog" size={25} className='mr-2' color={Colors[colorScheme ?? 'light'].tint} 
       onPress={() => {
-        console.log('Navigating to settings');
         router.push('/(main)/settings');
       }} />
     </View>
