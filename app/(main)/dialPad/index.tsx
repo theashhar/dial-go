@@ -8,11 +8,11 @@ import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function File() {
+export default function Settings() {
   return (
     <SafeAreaView>
       <ThemedView>
-        <ThemedText type='subtitle'>Contacts Tab</ThemedText>
+        <ThemedText style={{textAlign:'center'}} type='subtitle'>DialPad</ThemedText>
       </ThemedView>
     </SafeAreaView>
   );
