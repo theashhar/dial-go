@@ -10,7 +10,7 @@ export type IconSymbolName = string;
 export function IconSymbol({
   name,
   size = 26,
-  color,
+  color = 'black',
   style,
 }: {
   name: IconSymbolName;

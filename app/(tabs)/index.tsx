@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, Text } from 'react-native';
+import { Image, StyleSheet, Platform, Text, TouchableOpacity } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -6,14 +6,21 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { verifyInstallation } from 'nativewind';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AppHeader from '@/components/AppHeader';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { Colors } from '@/constants/Colors';
 
 export default function HomeScreen() {
   verifyInstallation();
+  const colorScheme = useColorScheme();
 
-  return (
-    <SafeAreaView>
-      <ThemedText type='subtitle'>Recent Tab</ThemedText>
-    </SafeAreaView>
-  );
+  return (<>
+    <SafeAreaView className='bg-white dark:bg-emerald-950'>
+      <AppHeader Screen='Call History' />
+      </SafeAreaView>
+      {/* <TouchableOpacity onPress={() => router.push('/(main)/file')}> */}
+      <ThemedText>file</ThemedText>
+      {/* </TouchableOpacity> */}
+</>);
 }
 

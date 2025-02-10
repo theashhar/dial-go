@@ -9,6 +9,8 @@ export const theme = '#11B985';
 export const Colors = {
   light: {
     theme: theme,
+    bgSecondary: 'white',
+
     text: '#11181C',
     background: '#fff',
     tint: tintColorLight,
@@ -18,6 +20,7 @@ export const Colors = {
   },
   dark: {
     theme: theme,
+    bgSecondary:'#043029',
     text: '#ECEDEE',
     background: '#151718',
     tint: tintColorDark,
