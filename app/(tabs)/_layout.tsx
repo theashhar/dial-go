@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { router, Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
 import DialPadIcon from '@/components/DialPadIcon'; 
@@ -13,6 +13,7 @@ export default function TabLayout() {
 
   return (<>
     <DialPadIcon />
+    {/* <DialPadIcon onPress={() => {router.push('/(main)/dialPad')}} /> */}
   
     <Tabs
       screenOptions={{
