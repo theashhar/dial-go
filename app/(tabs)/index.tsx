@@ -19,7 +19,7 @@ export default function HomeScreen() {
       <AppHeader Screen='Call History' />
       </SafeAreaView>
       {/* <TouchableOpacity onPress={() => router.push('/(main)/file')}> */}
-      <ThemedText>file</ThemedText>
+      <ThemedText className='w-full p-12 text-center' >Call History Error due to expo managed work flow</ThemedText>
       {/* </TouchableOpacity> */}
 </>);
 }
