@@ -1,4 +1,4 @@
-import { StyleSheet, Image, Platform, View, TouchableOpacity, Linking, Alert, Vibration, Modal } from 'react-native';
+import { StyleSheet, Image, Platform, View, TouchableOpacity, Linking, Alert, Vibration, Modal, TextInput } from 'react-native';
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
@@ -9,71 +9,41 @@ import { useState } from 'react';
 import * as Clipboard from 'expo-clipboard'; // Import expo-clipboard
 import showToast from '@/utils/toastMessage';
 import * as Contacts from 'expo-contacts';
+import AddContactModal from './AddContactModal';
 
 export default function DialPad() {
     const colorScheme = useColorScheme();
-    const [input, setInput] = useState('');
+    const [numberInput, setNumberInput] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [isDialPadVisible, setIsDialPadVisible] = useState(true);
+    const [isContactModalVisible, setIsContactModalVisible] = useState(false);
 
-    
-    const addToContacts = async () => {
-        if (!input.trim()) {
-          showToast('Please enter a valid number to add to contacts.');
-          return;
-        }
-      
-        try {
-          // Request contact permissions
-          const { status: readStatus } = await Contacts.requestPermissionsAsync();
-          const { status: writeStatus } = await Contacts.requestPermissionsAsync("android.permission.WRITE_CONTACTS");
-      
-          if (readStatus !== 'granted' || writeStatus !== 'granted') {
-            showToast('Permission to access contacts was denied.');
-            return;
-          }
-      
-          // Prepare the contact data
-          const contact = {
-            [Contacts.Fields.Name]: `New Contact ${input}`,
-            [Contacts.Fields.PhoneNumbers]: [{ number: input }],
-          };
-      
-          // Create the contact
-          await Contacts.addContactAsync(contact);
-          showToast('Contact added successfully!', 'success');
-        } catch (error) {
-          console.error('Failed to add contact:', error);
-          showToast('Failed to add contact.');
-        }
-      };
-    
     // Handle number input
     const handleInput = (digit: string) => {
-        setInput((prev) => prev + digit);
+        setNumberInput((prev) => prev + digit);
         Vibration.vibrate(50); // Add haptic feedback
     };
 
     // Handle backspace (cut button)
     const handleBackspace = () => {
-        setInput((prev) => prev.slice(0, -1));
+        setNumberInput((prev) => prev.slice(0, -1));
         Vibration.vibrate(50); // Add haptic feedback
     };
 
     // Handle long press to clear input
     const handleClear = () => {
-        setInput('');
+        setNumberInput('');
         Vibration.vibrate(100); // Add haptic feedback
     };
 
     // Handle call button press
     const handleCall = () => {
-        if (!input) {
+        if (!numberInput) {
             showToast("Invalid Number");
             return;
         }
 
-        const phoneNumber = `tel:${input}`;
+        const phoneNumber = `tel:${numberInput}`;
 
         Linking.canOpenURL(phoneNumber)
             .then((supported) => {
@@ -87,12 +57,12 @@ export default function DialPad() {
     };
 
     const openMessage = () => {
-        if (!input) {
+        if (!numberInput) {
             Alert.alert('No Number', 'Please enter a valid number to send a message.');
             return;
         }
 
-        const phoneNumber = `sms:${input.trim()}`;
+        const phoneNumber = `sms:${numberInput.trim()}`;
 
         Linking.canOpenURL(phoneNumber)
             .then((supported) => {
@@ -106,12 +76,12 @@ export default function DialPad() {
     };
 
     const copyToClipboard = async () => {
-        if (!input) {
+        if (!numberInput) {
             showToast('No NumberPlease enter a valid number to copy.');
             return;
         }
         Vibration.vibrate(70)
-        await Clipboard.setStringAsync(input); // Copy the number to the clipboard
+        await Clipboard.setStringAsync(numberInput); // Copy the number to the clipboard
         showToast('Number Copied', 'success');
 
     };
@@ -119,7 +89,7 @@ export default function DialPad() {
         <>
             <TouchableOpacity
                 activeOpacity={0.7}
-                className='absolute bottom-20 right-7 z-20 bg-emerald-500 p-4 rounded-2xl'
+                className='absolute bottom-10 right-7 z-20 bg-emerald-500 p-4 rounded-2xl'
                 style={{
                     // Shadow for iOS
                     shadowOffset: { width: 0, height: 4 },
@@ -134,8 +104,6 @@ export default function DialPad() {
                 <Entypo name="dial-pad" size={28} color={Colors[colorScheme ?? 'light'].same} />
             </TouchableOpacity>
 
-            {/* Modal View */}
-            {isDialPadVisible && (
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -157,7 +125,7 @@ export default function DialPad() {
                             <ThemedView className="absolute bottom-0 w-full p-4 bg-white shadow-lg border-t border-neutral-200 dark:border-neutral-600">
                                 {/* Display Dialed Numbers */}
                                 <ThemedView className="mb-4 p-4 max-h-32 bg-gray-100 dark:bg-neutral-800 rounded-lg flex flex-row items-center justify-between">
-                                    {input ? (
+                                    {numberInput ? (
                                         <>
                                             <TouchableOpacity
                                                 className='bg-emerald-200 dark:bg-emerald-900 rounded-full p-2 pt-2.5 items-center justify-center'
@@ -172,12 +140,12 @@ export default function DialPad() {
                                                 className="text-center w-3/5"
                                                 onLongPress={copyToClipboard} // Long press to copy the numbe
                                             >
-                                                {input}
+                                                {numberInput}
                                             </ThemedText>
                                             <TouchableOpacity
                                                 className='bg-emerald-200 dark:bg-emerald-900 rounded-full p-2 pr-2.5 items-center justify-center'
                                                 activeOpacity={0.5}
-                                                onPress={addToContacts}
+                                                onPress={() => setIsContactModalVisible(true)}
                                             >
                                                 <MaterialCommunityIcons name="account-plus" size={20} color={Colors.theme} />
                                             </TouchableOpacity>
@@ -280,7 +248,22 @@ export default function DialPad() {
                         </TouchableOpacity>
                     </TouchableOpacity>
                 </Modal>
-            )}
+
+            {/* Contact Creation Modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isContactModalVisible}
+                onRequestClose={() => setIsContactModalVisible(false)}
+            >
+                <TouchableOpacity
+                    className="flex-1 justify-end "
+                    activeOpacity={1}
+                    onPress={() => setIsContactModalVisible(false)}
+                >
+                    <AddContactModal contactNumber={numberInput} />
+                </TouchableOpacity>
+            </Modal>
         </>
     );
 }

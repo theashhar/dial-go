@@ -1,7 +1,6 @@
 import { router, Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
-import DialPadIcon from '@/components/DialPadIcon'; 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
@@ -12,8 +11,7 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (<>
-    <DialPadIcon />
-    {/* <DialPadIcon onPress={() => {router.push('/(main)/dialPad')}} /> */}
+    {/* <DialPadIcon /> */}
   
     <Tabs
       screenOptions={{

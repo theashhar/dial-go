@@ -9,12 +9,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AppHeader from '@/components/AppHeader';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
+import DialPadIcon from '@/components/DialPadIcon'; 
 
 export default function HomeScreen() {
   verifyInstallation();
   const colorScheme = useColorScheme();
 
   return (<>
+      <DialPadIcon />
     <SafeAreaView className='bg-white dark:bg-emerald-950'>
       <AppHeader Screen='Call History' />
       </SafeAreaView>

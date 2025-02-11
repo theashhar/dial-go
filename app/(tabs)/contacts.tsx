@@ -12,6 +12,7 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import showToast from '@/utils/toastMessage';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AddContactIcon from '@/components/AddContactIcon';
 
 export default function ContactsScreen() {
   const colorScheme = useColorScheme();
@@ -137,6 +138,7 @@ export default function ContactsScreen() {
 
   return (
     <SafeAreaView className="bg-white dark:bg-emerald-950 flex-1">
+      <AddContactIcon />
       <AppHeader Screen="Contacts" />
       <ThemedView className="p-4 my-0 shadow-sm border-b bg-slate-800 border-neutral-200 dark:border-neutral-600">
         <TextInput
