@@ -27,6 +27,7 @@ export default function ContactsScreen() {
           const { data } = await Contacts.getContactsAsync({
             fields: [Contacts.Fields.Name, Contacts.Fields.PhoneNumbers],
           });
+          
           if (data.length > 0) {
             dispatch(setContacts(data));
           } else {
@@ -74,7 +75,7 @@ export default function ContactsScreen() {
           <View className="w-12 h-12 rounded-full bg-emerald-200 dark:bg-emerald-900 justify-center items-center mr-4">
             {item.image ? (
               <Image
-                source={{ uri: item.image }}
+                source={{ uri: item.image.uri ?? '' }}
                 className="w-10 h-10 rounded-full"
               />
             ) : (
@@ -124,8 +125,8 @@ export default function ContactsScreen() {
           <ActivityIndicator size="large" color={Colors[colorScheme ?? 'light'].tint} />
         ) : (
           <FlatList
-            data={filteredContacts}
-            keyExtractor={(item) => item.id || Math.random().toString()}
+            data={filteredContacts as Contacts.Contact[]}
+            keyExtractor={(item) => item.id || Math.random().toString() }
             renderItem={renderContact}
             ListEmptyComponent={
               <ThemedText className="text-center text-gray-600 dark:text-gray-400">

@@ -12,6 +12,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Provider } from 'react-redux';
 import { persistor, store } from '@/reduxStore';
 import { PersistGate } from 'redux-persist/integration/react';
+import Toast from 'react-native-toast-message';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -36,10 +37,10 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-
           <Stack screenOptions={{ headerShown: false }} />
           {/* <Slot /> */}
           <StatusBar style="auto" />
+          <Toast />
       </ PersistGate >
       </Provider>
     </ThemeProvider>

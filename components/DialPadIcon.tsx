@@ -7,6 +7,7 @@ import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
 import { useState } from 'react';
 import * as Clipboard from 'expo-clipboard'; // Import expo-clipboard
+import showToast from '@/utils/toastMessage';
 
 export default function DialPad() {
     const colorScheme = useColorScheme();
@@ -35,7 +36,7 @@ export default function DialPad() {
     // Handle call button press
     const handleCall = () => {
         if (!input) {
-            Alert.alert("Invalid Number", "Please enter a valid phone number.");
+            showToast("Invalid Number");
             return;
         }
 
@@ -44,7 +45,7 @@ export default function DialPad() {
         Linking.canOpenURL(phoneNumber)
             .then((supported) => {
                 if (!supported) {
-                    Alert.alert("Error", "Your device doesn't support phone calls.");
+                    showToast("Your device doesn't support phone calls.");
                 } else {
                     return Linking.openURL(phoneNumber);
                 }
@@ -73,12 +74,13 @@ export default function DialPad() {
 
       const copyToClipboard = async () => {
         if (!input) {
-          Alert.alert('No Number', 'Please enter a valid number to copy.');
+          showToast('No NumberPlease enter a valid number to copy.');
           return;
         }
     
         await Clipboard.setStringAsync(input); // Copy the number to the clipboard
-        Alert.alert('Copied', 'The number has been copied to the clipboard.'); // Notify the user
+        showToast('Number Copied', 'success');
+
       };
     return (
     <>
