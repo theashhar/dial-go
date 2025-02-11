@@ -13,6 +13,7 @@ import { Provider } from 'react-redux';
 import { persistor, store } from '@/reduxStore';
 import { PersistGate } from 'redux-persist/integration/react';
 import Toast from 'react-native-toast-message';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -35,14 +36,16 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-          <Stack screenOptions={{ headerShown: false }} />
-          {/* <Slot /> */}
-          <StatusBar style="auto" />
-          <Toast />
-      </ PersistGate >
-      </Provider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+              <Stack screenOptions={{ headerShown: false }} />
+              {/* <Slot /> */}
+              <StatusBar style="auto" />
+              <Toast />
+          </ PersistGate >
+        </Provider>
+      </GestureHandlerRootView>
     </ThemeProvider>
   );
 }

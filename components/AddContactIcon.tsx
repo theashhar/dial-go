@@ -4,11 +4,17 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { useState } from "react"
 import { Modal, TouchableOpacity } from "react-native"
 import AddContactModal from "./AddContactModal"
+import { useSelector } from "react-redux"
+import { RootState } from "@/reduxStore"
 
 const AddContactIcon = () => {
     const colorScheme = useColorScheme()
     const [isAddContactVisible, setIsAddContactVisible] = useState(false);
+    const { contacts, loading, error } = useSelector((state: RootState) => state.contacts);
 
+    const handleSaveSuccess = () => {
+        setIsAddContactVisible(false)
+    }
     return (<>
         <TouchableOpacity
             activeOpacity={0.7}
@@ -35,8 +41,7 @@ const AddContactIcon = () => {
                     activeOpacity={1}
                     onPress={() => setIsAddContactVisible(false)}
                 >
-
-                    <AddContactModal />
+                    <AddContactModal onSaveSuccess={handleSaveSuccess} />
                 </TouchableOpacity>
             </Modal>
             <MaterialCommunityIcons name="phone-plus" size={28} color={Colors[colorScheme ?? 'light'].same} />

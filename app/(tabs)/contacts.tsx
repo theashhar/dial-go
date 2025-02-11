@@ -1,8 +1,19 @@
-import { FlatList, TouchableOpacity, ActivityIndicator, View, Text, Image, TextInput, Linking } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+  View,
+  Text,
+  Image,
+  TextInput,
+  Linking,
+  Alert,
+  StyleSheet,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useEffect, useState } from 'react';
 import * as Contacts from 'expo-contacts';
 import AppHeader from '@/components/AppHeader';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +24,8 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import showToast from '@/utils/toastMessage';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AddContactIcon from '@/components/AddContactIcon';
+import { Swipeable } from 'react-native-gesture-handler'; // Import Swipeable
+import { RectButton } from 'react-native-gesture-handler'; // Import RectButton for swipe actions
 
 export default function ContactsScreen() {
   const colorScheme = useColorScheme();
@@ -30,7 +43,7 @@ export default function ContactsScreen() {
           const { data } = await Contacts.getContactsAsync({
             fields: [Contacts.Fields.Name, Contacts.Fields.PhoneNumbers],
           });
-          
+
           if (data.length > 0) {
             dispatch(setContacts(data));
           } else {
@@ -63,16 +76,62 @@ export default function ContactsScreen() {
     }
   }, [searchQuery, contacts]);
 
+  // Function to handle contact deletion
+  const handleDeleteContact = async (contactId: string) => {
+    try {
+      dispatch(setLoading(true));
+      // Delete the contact from the device
+      await Contacts.removeContactAsync(contactId);
+      showToast('Contact deleted successfully!', 'success');
+
+      // Fetch the updated list of contacts
+      const { data } = await Contacts.getContactsAsync({
+        fields: [Contacts.Fields.Name, Contacts.Fields.PhoneNumbers],
+      });
+
+      // Update the Redux state with the new list of contacts
+      dispatch(setContacts(data));
+    } catch (error) {
+      console.error('Failed to delete contact:', error);
+      showToast('Failed to delete contact.');
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  // Function to show delete confirmation alert
+  const confirmDelete = (contactId: string, contactName: string) => {
+    Alert.alert(
+      'Delete Contact',
+      `Are you sure you want to delete ${contactName}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', onPress: () => handleDeleteContact(contactId), style: 'destructive' },
+      ]
+    );
+  };
+
+  // Render swipeable delete action
+  const renderRightActions = (contactId: string, contactName: string) => {
+    return (
+      <RectButton
+        style={styles.deleteButton}
+        onPress={() => confirmDelete(contactId, contactName)}
+      >
+        <MaterialCommunityIcons name="delete" size={24} color="white" />
+      </RectButton>
+    );
+  };
+
   const renderContact = ({ item }: { item: Contacts.Contact }) => {
     const firstLetter = item.name ? item.name.charAt(0).toUpperCase() : '';
 
     const handleCall = (number: string | undefined) => {
-      console.log(number)
       if (!number) {
-        showToast("Invalid Number");
+        showToast('Invalid Number');
         return;
       }
-    
+
       const phoneNumber = `tel:${number}`;
       Linking.canOpenURL(phoneNumber)
         .then((supported) => {
@@ -82,17 +141,15 @@ export default function ContactsScreen() {
             return Linking.openURL(phoneNumber);
           }
         })
-        .catch((err) => console.error("Failed to make call:", err));
+        .catch((err) => console.error('Failed to make call:', err));
     };
-    
+
     return (
-      <>
-        <View
-          className="p-2 mb-2 bg-transparent rounded-lg flex-row items-center"
-          accessible={true}
-          accessibilityLabel={`Contact: ${item.name}`}
-          accessibilityRole="button"
-        >
+      <Swipeable
+        renderRightActions={() => renderRightActions(item.id, item.name)} // Swipe from right to delete
+        overshootRight={false} // Disable overshoot effect
+      >
+        <View className="p-2 mb-2 bg-transparent rounded-lg flex-row items-center">
           {/* Image or Fallback */}
           <View className="w-12 h-12 rounded-full bg-emerald-200 dark:bg-emerald-900 justify-center items-center mr-4">
             {item.image ? (
@@ -115,16 +172,16 @@ export default function ContactsScreen() {
                 {item.phoneNumbers[0]?.number}
               </Text>
             )}
-          <TouchableOpacity
-            className="absolute right-1 top-5"
-            onPress={() => handleCall(item.phoneNumbers[0]?.number)}>
-            <MaterialCommunityIcons name="phone-outgoing" size={20} color={Colors.theme} />
-          </TouchableOpacity>
-
+            <TouchableOpacity
+              className="absolute right-1 top-5"
+              onPress={() => handleCall(item.phoneNumbers[0]?.number)}
+            >
+              <MaterialCommunityIcons name="phone-outgoing" size={20} color={Colors.theme} />
+            </TouchableOpacity>
           </View>
         </View>
-        <View className='ml-6 h-[1px] bg-neutral-100 dark:bg-emerald-900' />
-      </>
+        <View className="ml-6 h-[1px] bg-neutral-100 dark:bg-emerald-900" />
+      </Swipeable>
     );
   };
 
@@ -155,7 +212,7 @@ export default function ContactsScreen() {
         ) : (
           <FlatList
             data={filteredContacts as Contacts.Contact[]}
-            keyExtractor={(item) => item.id || Math.random().toString() }
+            keyExtractor={(item) => item.id || Math.random().toString()}
             renderItem={renderContact}
             ListEmptyComponent={
               <ThemedText className="text-center text-gray-600 dark:text-gray-400">
@@ -168,3 +225,13 @@ export default function ContactsScreen() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  deleteButton: {
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    height: '100%',
+  },
+});
