@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
 import { useState } from 'react';
+import * as Clipboard from 'expo-clipboard'; // Import expo-clipboard
 
 export default function DialPad() {
     const colorScheme = useColorScheme();
@@ -70,6 +71,15 @@ export default function DialPad() {
           .catch((err) => console.error('Error opening messages:', err));
       };
 
+      const copyToClipboard = async () => {
+        if (!input) {
+          Alert.alert('No Number', 'Please enter a valid number to copy.');
+          return;
+        }
+    
+        await Clipboard.setStringAsync(input); // Copy the number to the clipboard
+        Alert.alert('Copied', 'The number has been copied to the clipboard.'); // Notify the user
+      };
     return (
     <>
         <TouchableOpacity
@@ -111,7 +121,7 @@ export default function DialPad() {
                     >
                         <ThemedView className="absolute bottom-0 w-full p-4 bg-white shadow-lg border-t border-neutral-200 dark:border-neutral-600">
                             {/* Display Dialed Numbers */}
-                            <ThemedView className="mb-4 p-4 bg-gray-100 dark:bg-neutral-800 rounded-lg flex flex-row items-center justify-between">
+                            <ThemedView className="mb-4 p-4 max-h-32 bg-gray-100 dark:bg-neutral-800 rounded-lg flex flex-row items-center justify-between">
                                 {input ? (
                                     <>
                                         <TouchableOpacity
@@ -122,9 +132,10 @@ export default function DialPad() {
                                             <MaterialCommunityIcons name="comment-account" size={20} color={Colors.theme} />
                                         </TouchableOpacity>
                                         <ThemedText
-                                            type='title'
+                                            type='subtitle'
                                             selectable={true}
                                             className="text-center w-3/5"
+                                            onLongPress={copyToClipboard} // Long press to copy the numbe
                                         >
                                             {input}
                                         </ThemedText>
@@ -213,7 +224,8 @@ export default function DialPad() {
                                     className="w-24 p-4 justify-center items-center shadow-lg"
                                     onPress={() => setIsDialPadVisible(false)}
                                 >
-                                    <MaterialCommunityIcons name="chevron-down" size={30} color="white" />
+                                    <MaterialCommunityIcons name="chevron-down" size={30} color= {Colors[colorScheme ?? 'light'].invert}
+ />
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     className="w-24 p-4 bg-green-500 rounded-full justify-center items-center shadow-lg"
@@ -226,7 +238,7 @@ export default function DialPad() {
                                     onPress={handleBackspace}
                                     onLongPress={handleClear}
                                 >
-                                    <MaterialCommunityIcons name="backspace" size={25} color="white" />
+                                    <MaterialCommunityIcons name="backspace" size={25} color= {Colors[colorScheme ?? 'light'].invert} />
                                 </TouchableOpacity>
                             </ThemedView>
                         </ThemedView>
