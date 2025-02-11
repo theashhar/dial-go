@@ -9,6 +9,8 @@ import "../global.css";
 import DialPadIcon from '@/components/DialPadIcon'; 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { ThemedText } from '@/components/ThemedText';
+import { Provider } from 'react-redux';
+import { store } from '@/reduxStore';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -31,9 +33,11 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }} />
-      {/* <Slot /> */}
-      <StatusBar style="auto" />
+      <Provider store={store}>
+        <Stack screenOptions={{ headerShown: false }} />
+        {/* <Slot /> */}
+        <StatusBar style="auto" />
+      </Provider>
     </ThemeProvider>
   );
 }
