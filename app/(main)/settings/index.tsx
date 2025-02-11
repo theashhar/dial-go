@@ -13,7 +13,7 @@ export default function Settings() {
   return (
     <SafeAreaView>
       <ThemedView className="p-4">
-        <ThemedText type="subtitle" className="w-full text-center">
+        <ThemedText type="title" className="w-full text-center">
           Settings
         </ThemedText>
 
@@ -26,7 +26,7 @@ export default function Settings() {
               className={`py-1 rounded-lg border items-center px-5 ${
                 theme === 'light'
                   ? 'bg-emerald-100 dark:bg-emerald-900 border-emerald-500'
-                  : 'bg-gray-100 dark:bg-gray-800 border-transparent'
+                  : 'bg-neutral-100 dark:bg-neutral-800 border-transparent'
               }`}
               onPress={() => dispatch(setTheme('light'))}
             >
@@ -34,7 +34,7 @@ export default function Settings() {
                 className={`${
                   theme === 'light'
                     ? 'text-emerald-700 dark:text-emerald-200'
-                    : 'text-gray-700 dark:text-gray-200'
+                    : 'text-neutral-700 dark:text-neutral-200'
                 }`}
               >
                 Light
@@ -46,7 +46,7 @@ export default function Settings() {
               className={`py-1 rounded-lg border items-center px-5 ${
                 theme === 'dark'
                   ? 'bg-emerald-100 dark:bg-emerald-900 border-emerald-500'
-                  : 'bg-gray-100 dark:bg-gray-800 border-transparent'
+                  : 'bg-neutral-100 dark:bg-neutral-800 border-transparent'
               }`}
               onPress={() => dispatch(setTheme('dark'))}
             >
@@ -54,7 +54,7 @@ export default function Settings() {
                 className={`${
                   theme === 'dark'
                     ? 'text-emerald-700 dark:text-emerald-200'
-                    : 'text-gray-700 dark:text-gray-200'
+                    : 'text-neutral-700 dark:text-neutral-200'
                 }`}
               >
                 Dark
@@ -66,7 +66,7 @@ export default function Settings() {
               className={`py-1 rounded-lg border items-center px-5 ${
                 theme === 'system'
                   ? 'bg-emerald-100 dark:bg-emerald-900 border-emerald-500'
-                  : 'bg-gray-100 dark:bg-gray-800 border-transparent'
+                  : 'bg-neutral-100 dark:bg-neutral-800 border-transparent'
               }`}
               onPress={() => dispatch(setTheme('system'))}
             >
@@ -74,7 +74,7 @@ export default function Settings() {
                 className={`${
                   theme === 'system'
                     ? 'text-emerald-700 dark:text-emerald-200'
-                    : 'text-gray-700 dark:text-gray-200'
+                    : 'text-neutral-700 dark:text-neutral-200'
                 }`}
               >
                 System

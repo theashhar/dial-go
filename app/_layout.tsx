@@ -20,7 +20,7 @@ import { setTheme } from '@/reduxStore/slices/themeSlice';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-function ThemeWrapper({ children }) {
+function ThemeWrapper({ children } : {children : any}) {
   const dispatch = useDispatch();
   const theme = useSelector((state : RootState) => state.theme.theme); // Get theme from Redux
   const colorScheme = useColorScheme(); // Get system color scheme

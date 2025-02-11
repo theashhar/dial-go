@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, Text, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -20,9 +20,12 @@ export default function HomeScreen() {
     <SafeAreaView className='bg-white dark:bg-emerald-950'>
       <AppHeader Screen='Call History' />
       </SafeAreaView>
-      {/* <TouchableOpacity onPress={() => router.push('/(main)/file')}> */}
-      <ThemedText className='w-full p-12 text-center' >Call History Error due to expo managed work flow</ThemedText>
-      {/* </TouchableOpacity> */}
+      <View className='flex-1 bg-white dark:bg-neutral-900'>
+        {/* <TouchableOpacity onPress={() => router.push('/(main)/file')}> */}
+        <ThemedText className='w-full p-12 text-center' >Call History Error due to expo managed work flow</ThemedText>
+        {/* </TouchableOpacity> */}
+
+      </View>
 </>);
 }
 
