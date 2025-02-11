@@ -4,12 +4,18 @@ import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 import * as Contacts from 'expo-contacts';
 import showToast from '@/utils/toastMessage';
+import { setLoading, setContacts } from '@/reduxStore/slices/contactSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/reduxStore';
 
 interface ContactModalProps {
     contactNumber?: string;
 }
 
 export default function AddContactModal({ contactNumber = '' }: ContactModalProps) {
+    const dispatch = useDispatch();
+    const { contacts, loading, error } = useSelector((state: RootState) => state.contacts);
+
     const [contactName, setContactName] = useState('');
     const [contactPhone, setContactPhone] = useState(contactNumber);
 
@@ -24,6 +30,7 @@ export default function AddContactModal({ contactNumber = '' }: ContactModalProp
         }
 
         try {
+            dispatch(setLoading(true));
             // Request contact permissions
             const { status: readStatus } = await Contacts.requestPermissionsAsync();
             const { status: writeStatus } = await Contacts.requestPermissionsAsync("android.permission.WRITE_CONTACTS");
@@ -42,13 +49,20 @@ export default function AddContactModal({ contactNumber = '' }: ContactModalProp
             // Create the contact
             await Contacts.addContactAsync(contact);
             showToast('Contact added successfully!', 'success');
-            // onSave(); // Trigger the save callback
-            // onClose(); // Close the modal
-            // setContactName('');
-            // setContactPhone('');
+
+            // Fetch the updated list of contacts
+            const { data } = await Contacts.getContactsAsync({
+                fields: [Contacts.Fields.FirstName, Contacts.Fields.PhoneNumbers],
+            });
+
+            // Update the Redux state with the new list of contacts
+            dispatch(setContacts(data));
+
         } catch (error) {
             console.error('Failed to add contact:', error);
             showToast('Failed to add contact.');
+        } finally {
+            dispatch(setLoading(false));
         }
     };
 
