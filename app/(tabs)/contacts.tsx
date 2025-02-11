@@ -149,7 +149,7 @@ export default function ContactsScreen() {
         renderRightActions={() => renderRightActions(item.id, item.name)} // Swipe from right to delete
         overshootRight={false} // Disable overshoot effect
       >
-        <View className="p-2 mb-2 bg-transparent rounded-lg flex-row items-center">
+        <ThemedView className="p-2 py-4 mb-0 bg-transparent rounded-lg flex-row items-center">
           {/* Image or Fallback */}
           <View className="w-12 h-12 rounded-full bg-emerald-200 dark:bg-emerald-900 justify-center items-center mr-4">
             {item.image ? (
@@ -179,7 +179,7 @@ export default function ContactsScreen() {
               <MaterialCommunityIcons name="phone-outgoing" size={20} color={Colors.theme} />
             </TouchableOpacity>
           </View>
-        </View>
+        </ThemedView>
         <View className="ml-6 h-[1px] bg-neutral-100 dark:bg-emerald-900" />
       </Swipeable>
     );
