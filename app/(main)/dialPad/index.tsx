@@ -1,3 +1,13 @@
+// OBSOLETE
+// OBSOLETE
+// OBSOLETE
+// OBSOLETE
+// OBSOLETE
+// OBSOLETE
+// OBSOLETE
+// OBSOLETE
+
+
 import { Text, TouchableOpacity, View, Vibration, ScrollView, TextInput, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/ThemedText';

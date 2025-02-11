@@ -1,4 +1,4 @@
-import { FlatList, TouchableOpacity, ActivityIndicator, View, Text, Image, TextInput } from 'react-native';
+import { FlatList, TouchableOpacity, ActivityIndicator, View, Text, Image, TextInput, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -10,6 +10,8 @@ import { RootState } from '@/reduxStore';
 import { setContacts, setLoading, setError } from '@/reduxStore/slices/contactSlice';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import showToast from '@/utils/toastMessage';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function ContactsScreen() {
   const colorScheme = useColorScheme();
@@ -63,9 +65,28 @@ export default function ContactsScreen() {
   const renderContact = ({ item }: { item: Contacts.Contact }) => {
     const firstLetter = item.name ? item.name.charAt(0).toUpperCase() : '';
 
+    const handleCall = (number: string | undefined) => {
+      console.log(number)
+      if (!number) {
+        showToast("Invalid Number");
+        return;
+      }
+    
+      const phoneNumber = `tel:${number}`;
+      Linking.canOpenURL(phoneNumber)
+        .then((supported) => {
+          if (!supported) {
+            showToast("Your device doesn't support phone calls.");
+          } else {
+            return Linking.openURL(phoneNumber);
+          }
+        })
+        .catch((err) => console.error("Failed to make call:", err));
+    };
+    
     return (
       <>
-        <TouchableOpacity
+        <View
           className="p-2 mb-2 bg-transparent rounded-lg flex-row items-center"
           accessible={true}
           accessibilityLabel={`Contact: ${item.name}`}
@@ -93,8 +114,14 @@ export default function ContactsScreen() {
                 {item.phoneNumbers[0]?.number}
               </Text>
             )}
+          <TouchableOpacity
+            className="absolute right-1 top-5"
+            onPress={() => handleCall(item.phoneNumbers[0]?.number)}>
+            <MaterialCommunityIcons name="phone-outgoing" size={20} color={Colors.theme} />
+          </TouchableOpacity>
+
           </View>
-        </TouchableOpacity>
+        </View>
         <View className='ml-6 h-[1px] bg-neutral-100 dark:bg-emerald-900' />
       </>
     );
