@@ -1,4 +1,4 @@
-import { FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { FlatList, TouchableOpacity, ActivityIndicator, View, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -16,6 +16,7 @@ export default function ContactsScreen() {
   const dispatch = useDispatch();
   const { contacts, loading, error } = useSelector((state: RootState) => state.contacts);
 
+  console.log(contacts[4])
   useEffect(() => {
     const fetchContacts = async () => {
       dispatch(setLoading(true));
@@ -43,28 +44,47 @@ export default function ContactsScreen() {
     fetchContacts();
   }, [dispatch]);
 
-  const renderContact = ({ item }: { item: Contacts.Contact }) => (
+const renderContact = ({ item }: { item: Contacts.Contact }) => {
+    const firstLetter = item.name ? item.name.charAt(0).toUpperCase() : '';
+
+  return (<>
     <TouchableOpacity
-      className="p-4 mb-2 bg-gray-100 dark:bg-emerald-950 rounded-lg"
+      className="p-2 mb-2 bg-transparent rounded-lg flex-row items-center"
+      accessible={true}
+      accessibilityLabel={`Contact: ${item.name}`}
+      accessibilityRole="button"
       // Uncomment and customize for navigation:
       // onPress={() => router.push(`/contactDetail?contactId=${item.id}`)}
     >
-      <ThemedText className="text-lg font-semibold">{item.name}</ThemedText>
-      {item.phoneNumbers && (
-        <ThemedText className="text-gray-600 dark:text-gray-400">
-          {item.phoneNumbers[0]?.number}
-        </ThemedText>
-      )}
-    </TouchableOpacity>
-  );
+      {/* Image or Fallback */}
+      <View className="w-12 h-12 rounded-full bg-emerald-200 dark:bg-emerald-900 justify-center items-center mr-4">
+        {item.image ? (
+          <Image
+            source={{ uri: item.image }}
+            className="w-10 h-10 rounded-full"
+          />
+        ) : (
+          <ThemedText className="text-lg font-semibold text-gray-800 dark:text-white">
+            {firstLetter}
+          </ThemedText>
+        )}
+      </View>
 
-  if (loading) {
-    return (
-      <SafeAreaView className="bg-white dark:bg-emerald-950 flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color={Colors[colorScheme ?? 'light'].tint} />
-      </SafeAreaView>
-    );
-  }
+      {/* Contact Details */}
+      <View className="flex-1">
+        <ThemedText className="text-lg font-semibold">{item.name}</ThemedText>
+        {item.phoneNumbers && (
+          <Text className="text-neutral-600 text-sm dark:text-neutral-400">
+            {item.phoneNumbers[0]?.number}
+          </Text>
+        )}
+      </View>
+    </TouchableOpacity>
+    <View className='ml-6 h-[1px] bg-neutral-100 dark:bg-emerald-900' />
+    </>
+  )
+ } ;
+
 
   if (error) {
     return (
@@ -78,6 +98,9 @@ export default function ContactsScreen() {
     <SafeAreaView className="bg-white dark:bg-emerald-950 flex-1">
       <AppHeader Screen="Contacts" />
       <ThemedView className="p-4 bg-white dark:bg-black flex-1">
+      {loading ? (
+        <ActivityIndicator size="large" color={Colors[colorScheme ?? 'light'].tint} />
+      ) : (
         <FlatList
           data={contacts}
           keyExtractor={(item) => item.id || Math.random().toString()}
@@ -88,6 +111,7 @@ export default function ContactsScreen() {
             </ThemedText>
           }
         />
+      )}
       </ThemedView>
     </SafeAreaView>
   );
