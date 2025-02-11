@@ -6,12 +6,13 @@ import { useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { Linking, Alert } from 'react-native';
 
 export default function Settings() {
   const colorScheme = useColorScheme();
   const [input, setInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-
+console.log(input)
   // Sample contact data
   const contacts = [
     { name: 'Joko Widarto', obsidiario: '1770', category: 'n' },
@@ -32,6 +33,7 @@ export default function Settings() {
     Vibration.vibrate(50); // Add haptic feedback
   };
 
+
   // Handle backspace (cut button)
   const handleBackspace = () => {
     setInput((prev) => prev.slice(0, -1));
@@ -46,9 +48,24 @@ export default function Settings() {
 
   // Handle call button press
   const handleCall = () => {
-    console.log(`Calling ${input}...`);
-    // Replace with actual call functionality
+    if (!input) {
+      Alert.alert("Invalid Number", "Please enter a valid phone number.");
+      return;
+    }
+  
+    const phoneNumber = `tel:${input}`;
+  
+    Linking.canOpenURL(phoneNumber)
+      .then((supported) => {
+        if (!supported) {
+          Alert.alert("Error", "Your device doesn't support phone calls.");
+        } else {
+          return Linking.openURL(phoneNumber);
+        }
+      })
+      .catch((err) => console.error("Failed to make call:", err));
   };
+  
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100 dark:bg-black">
@@ -76,19 +93,21 @@ export default function Settings() {
       </ScrollView>
 
       {/* Dial Pad */}
-      <ThemedView className="p-4 bg-white shadow-lg">
+      <ThemedView className="p-4 bg-white shadow-lg border-t border-neutral-200 dark:border-neutral-600">
         {/* Display Dialed Numbers */}
         <ThemedView className="mb-4 p-4 bg-gray-100 dark:bg-neutral-800 rounded-lg">
           <ThemedText
-            className="text-2xl text-center"
-            onLongPress={handleClear} // Long press to clear input
+            type='title'
+            selectable
+            className="text-center"
+            style={{opacity: input ? 1 : 0.4}}
           >
             {input || 'Dial a number'}
           </ThemedText>
         </ThemedView>
 
         <ThemedView className="mb-4">
-          <ThemedText className="text-2xl font-bold mb-4">Dialpad</ThemedText>
+          {/* <ThemedText className="text-2xl font-bold mb-8">Dialpad</ThemedText> */}
           <ThemedView className="flex-row justify-around mb-4">
             {['1', '2', '3'].map((digit) => (
               <TouchableOpacity
@@ -124,16 +143,18 @@ export default function Settings() {
           </ThemedView>
           <ThemedView className="flex-row justify-around">
             <TouchableOpacity
-              className="w-20 h-20 rounded-full justify-center items-center bg-gray-200 dark:bg-emerald-950 shadow-sm"
+              className="w-20 h-20 rounded-full justify-center pt-6 items-center bg-gray-200 dark:bg-emerald-950 shadow-sm"
               onPress={() => handleInput('*')}
             >
-              <ThemedText type="title">*</ThemedText>
+              <ThemedText type="megaTitle">*</ThemedText>
             </TouchableOpacity>
             <TouchableOpacity
               className="w-20 h-20 rounded-full justify-center items-center bg-gray-200 dark:bg-emerald-950 shadow-sm"
               onPress={() => handleInput('0')}
+              onLongPress={() => handleInput('+')}
             >
               <ThemedText type="title">0</ThemedText>
+              <ThemedText className='absolute bottom-1' style={{opacity:0.4}} type="small">+</ThemedText>
             </TouchableOpacity>
             <TouchableOpacity
               className="w-20 h-20 rounded-full justify-center items-center bg-gray-200 dark:bg-emerald-950 shadow-sm"
@@ -161,6 +182,8 @@ export default function Settings() {
           <TouchableOpacity
             className="w-24 p-4  justify-center items-center shadow-lg"
             onPress={handleBackspace}
+            onLongPress={handleClear}
+
           >
             <MaterialCommunityIcons name="backspace" size={25} color="white" />
           </TouchableOpacity>

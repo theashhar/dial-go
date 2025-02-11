@@ -15,7 +15,8 @@ export default function ContactsScreen() {
     <SafeAreaView className='bg-white dark:bg-emerald-950'>
       <AppHeader Screen='Contacts' />
     </SafeAreaView>
-      <TouchableOpacity onPress={() => router.push('/(main)/file')}>
+      <TouchableOpacity 
+      >
       <ThemedText>file</ThemedText>
       </TouchableOpacity>
   </>);
