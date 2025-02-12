@@ -5,20 +5,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setTheme } from '@/reduxStore/slices/themeSlice';
 import { RootState } from '@/reduxStore';
 import { TouchableOpacity } from 'react-native';
+import AppHeader from '@/components/AppHeader';
 
 export default function Settings() {
   const dispatch = useDispatch();
   const theme = useSelector((state: RootState) => state.theme.theme);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="bg-white dark:bg-emerald-950 flex-1">
+      <AppHeader Screen='Settings' home={false} />
       <ThemedView className="p-4">
-        <ThemedText type="title" className="w-full text-center">
-          Settings
-        </ThemedText>
 
         {/* Theme Picker */}
-        <ThemedView className="mt-4">
+        <ThemedView className="mt-4 h-full">
           <ThemedText type="default">Select Theme</ThemedText>
           <ThemedView className="flex-row mt-2 justify-around">
             {/* Light Theme Tab */}
