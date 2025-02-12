@@ -3,31 +3,59 @@
 **A modern and intuitive phone dialer app built with React Native, enabling seamless calling, call history management, and contact storage.**
 
 ---
+## Screenshots
+
+<div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+
+  <img src="assets/images/1.png" width="200" />
+  <img src="assets/images/2.png" width="200" />
+  <img src="assets/images/3.png" width="200" />
+  <img src="assets/images/4.png" width="200" />
+  <img src="assets/images/5.png" width="200" />
+  <img src="assets/images/6.png" width="200" />
+
+</div>
 
 ## Features
 
 ### 1. Dial Pad
-- Traditional phone dial pad interface.
+- Traditional phone dial pad with a modern and intuitive design.
 - Input numbers and initiate calls effortlessly.
+- Save dialed numbers directly to contacts.
+- Send messages to dialed numbers instantly.
 
 ### 2. Call History
-- View recent calls (incoming, outgoing, and missed).
+- View and manage recent calls (incoming, outgoing, and missed).
 - Fetch call logs with device permissions.
+- Instantly update call logs after each call.
 
 ### 3. Contacts Management
-- Save new contacts and list stored contacts.
-- Simple search functionality to quickly find contacts.
+- Save new contacts and list stored contacts efficiently.
+- **Fast Search**: Optimized linear search for a fixed and limited contact list.
+- **Delete Contacts**: Easily remove saved contacts with a simple action.
 
-### 4. Error Handling & Debugging
-- Gracefully handle device permissions.
-- Display user-friendly error messages when necessary.
+### 4. UI/UX Enhancements
+- **Dark & Light Mode**: Seamless theme switching for better accessibility.
+- **Optimized Performance**: Efficient state management with Redux for a smooth and responsive experience.
+- **Minimal & Clean Interface**: Intuitive design for effortless navigation.
 
----
+### 5. Interactive Features
+- **Interactive Modals**: User-friendly modals for confirmations and alerts.
+- **Message with Number**: Send messages directly from the app.
+- **Haptic Feedback**: Subtle vibrations on key actions and errors.
+- **Toast Notifications**: Informative toast messages for instant feedback.
+- **Gesture Controls**: Swipe-to-delete functionality for a smooth user experience.
+
+### 6. Error Handling & Debugging
+- **Comprehensive Toast Messages**: Instant notifications for errors and actions.
+- **Robust Permission Handling**: Gracefully manage device permissions.
+- **User-Friendly Error Messages**: Clear and concise messages to improve usability.
+
 
 ## Tech Stack
 
-- **Frontend:** React Native with Expo or React Native CLI
-- **State Management:** Redux Toolkit or React Context API
+- **Frontend:** React Native with Expo (with --dev build)
+- **State Management:** Redux Toolkit
 - **Call State Management:** React Native Call Detection
 - **UI Components:** NativeWind
 
@@ -60,7 +88,7 @@
 
 4. Start the project:
    ```bash
-   expo start
+   npx expo start
    ```
 
 5. Run the app on a device or emulator:

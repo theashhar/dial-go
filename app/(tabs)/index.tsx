@@ -126,10 +126,10 @@ export default function HomeScreen() {
               keyExtractor={(item) => item.timestamp.toString()}
               renderItem={({ item }) => {
                 const { label, icon, color } = getCallType(item.type);
-                return (
-                  <TouchableOpacity onPress={() => handleCall(item.phoneNumber)}>
+                return (<>
+                  {/* <TouchableOpacity onPress={() => handleCall(item.phoneNumber)}>
                     <View className="border-b border-gray-300 dark:border-gray-700 p-3">
-                      {/* Number + Duration Row */}
+                      Number + Duration Row
                       <View className="flex flex-row justify-between items-center">
                         <Text className="text-lg font-bold dark:text-white">
                           {item.name || item.phoneNumber}
@@ -139,7 +139,7 @@ export default function HomeScreen() {
                         </Text>
                       </View>
 
-                      {/* Call Type + Icon Row */}
+                      Call Type + Icon Row
                       <View className="flex flex-row gap-1 items-center">
                         <Text className={`text-sm ${label === 'Missed' ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'}`}>
                           {label}
@@ -147,15 +147,79 @@ export default function HomeScreen() {
                         <MaterialCommunityIcons name={icon} size={14} color={color} />
                       </View>
                     </View>
-                  </TouchableOpacity>
-                );
+                  </TouchableOpacity> */}
+                  </>);
               }}
             />
           ) : (
             <ThemedText className="text-center p-4">No call history available</ThemedText>
           )
-        ) : (
-          <ThemedText className="text-center p-4 text-red-500">Permission denied! Unable to fetch call logs.</ThemedText>
+        ) : (<>
+                          <TouchableOpacity onPress={() => handleCall(item.phoneNumber)}>
+                    <View className="border-b border-gray-300 dark:border-gray-700 p-3">
+                      {/* Number + Duration Row */}
+                      <View className="flex flex-row justify-between items-center">
+                        <Text className="text-lg font-bold dark:text-white">
+                          Mrinal Gupta
+                        </Text>
+                        <Text className="text-sm text-gray-500 dark:text-gray-400">
+                          52s
+                        </Text>
+                      </View>
+
+                      {/* Call Type + Icon Row */}
+                      <View className="flex flex-row gap-1 items-center">
+                        <Text className='text-sm text-gray-500 dark:text-gray-400' >
+                          Incoming
+                        </Text>
+                        <MaterialCommunityIcons name='phone-incoming' size={14} color='grey' />
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                          <TouchableOpacity onPress={() => handleCall(item.phoneNumber)}>
+                    <View className="border-b border-gray-300 dark:border-gray-700 p-3">
+                      {/* Number + Duration Row */}
+                      <View className="flex flex-row justify-between items-center">
+                        <Text className="text-lg font-bold dark:text-white">
+                          9581599859
+                        </Text>
+                        <Text className="text-sm text-gray-500 dark:text-gray-400">
+                          0s
+                        </Text>
+                      </View>
+
+                      {/* Call Type + Icon Row */}
+                      <View className="flex flex-row gap-1 items-center">
+                        <Text className='text-sm text-red-500' >
+                          Missed
+                        </Text>
+                        <MaterialCommunityIcons name='phone-missed' size={14} color='red' />
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                          <TouchableOpacity onPress={() => handleCall(item.phoneNumber)}>
+                    <View className="border-b border-gray-300 dark:border-gray-700 p-3">
+                      {/* Number + Duration Row */}
+                      <View className="flex flex-row justify-between items-center">
+                        <Text className="text-lg font-bold dark:text-white">
+                          Ravi | Gym
+                        </Text>
+                        <Text className="text-sm text-gray-500 dark:text-gray-400">
+                          26s
+                        </Text>
+                      </View>
+
+                      {/* Call Type + Icon Row */}
+                      <View className="flex flex-row gap-1 items-center">
+                        <Text className='text-sm text-gray-500 dark:text-gray-400' >
+                          Outgoing
+                        </Text>
+                        <MaterialCommunityIcons name='phone-outgoing' size={14} color='grey' />
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+        </>
+          // <ThemedText className="text-center p-4 text-red-500">Permission denied! Unable to fetch call logs.</ThemedText>
         )}
       </View>
     </>
