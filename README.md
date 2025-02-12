@@ -5,7 +5,7 @@
 ---
 ## Screenshots
 
-<div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+<div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; border-radius:10px;">
 
   <img src="assets/images/1.png" width="200" />
   <img src="assets/images/2.png" width="200" />
