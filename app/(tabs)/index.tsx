@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import { 
-  View, 
-  Text, 
-  FlatList, 
-  PermissionsAndroid, 
-  TouchableOpacity, 
-  Linking, 
-  ToastAndroid
+import { useEffect, useState, useCallback } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  PermissionsAndroid,
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CallLogs from 'react-native-call-log';
 import AppHeader from '@/components/AppHeader';
@@ -23,9 +23,29 @@ export default function HomeScreen() {
   const [callHistory, setCallHistory] = useState<any[]>([]);
   const colorScheme = useColorScheme();
 
+  // Request permission on mount
   useEffect(() => {
     requestCallLogPermission();
   }, []);
+
+  // Auto-refresh when the user revisits the screen
+  useFocusEffect(
+    useCallback(() => {
+      if (hasPermission) {
+        fetchCallLogs();
+      }
+    }, [hasPermission])
+  );
+
+  // Auto-refresh every 5 seconds (polling)
+  useEffect(() => {
+    if (hasPermission) {
+      const interval = setInterval(() => {
+        fetchCallLogs();
+      }, 5000); // Every 5 seconds
+      return () => clearInterval(interval); // Cleanup interval on unmount
+    }
+  }, [hasPermission]);
 
   const requestCallLogPermission = async () => {
     try {
@@ -60,22 +80,18 @@ export default function HomeScreen() {
     }
   };
 
-  const getCallType = (type: string) => {
+  const getCallType = (type: number) => {
     switch (type) {
-      case '1':
+      case 1:
         return { label: 'Incoming', icon: 'phone-incoming', color: Colors[colorScheme ?? 'light'].invertLight };
-      case '2':
+      case 2:
         return { label: 'Outgoing', icon: 'phone-outgoing', color: Colors[colorScheme ?? 'light'].invertLight };
-      case '3':
+      case 3:
         return { label: 'Missed', icon: 'phone-missed', color: 'red' };
       default:
         return { label: 'Unknown', icon: 'help-circle', color: 'gray' };
     }
   };
-
-  // const showToast = (message: string) => {
-  //   ToastAndroid.show(message, ToastAndroid.SHORT);
-  // };
 
   const handleCall = (number: string | undefined) => {
     if (!number) {
