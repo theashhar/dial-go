@@ -7,12 +7,12 @@
 
 <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; border-radius:10px;">
 
-  <img src="assets/images/1.png" width="200" />
-  <img src="assets/images/2.png" width="200" />
-  <img src="assets/images/3.png" width="200" />
-  <img src="assets/images/4.png" width="200" />
-  <img src="assets/images/5.png" width="200" />
-  <img src="assets/images/6.png" width="200" />
+  <img src="assets/images/ss1.png" width="180" />
+  <img src="assets/images/ss2.png" width="180" />
+  <img src="assets/images/ss3.png" width="180" />
+  <img src="assets/images/ss4.png" width="180" />
+  <img src="assets/images/ss5.png" width="180" />
+  <img src="assets/images/ss6.png" width="180" />
 
 </div>
 
