@@ -73,7 +73,7 @@ export default function HomeScreen() {
 
   const fetchCallLogs = async () => {
     try {
-      const logs = await CallLogs.load(10); // Fetch last 10 call logs
+      const logs = await CallLogs.load(30); // Fetch last 10 call logs
       setCallHistory(logs);
     } catch (error) {
       console.error('Error fetching call logs:', error);
